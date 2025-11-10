@@ -36,7 +36,9 @@ class GenreSection extends StatelessWidget {
                 ),
                 Icon(
                   _getGenreIcon(genre),
-                  color: AppColors.goldenAccent,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.secondaryAccent
+                      : AppColors.goldenAccent,
                 ),
               ],
             ),
@@ -62,7 +64,9 @@ class GenreSection extends StatelessWidget {
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
-                              color: AppColors.lightGold,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.darkSurfaceVariant
+                                  : AppColors.lightGold.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: ClipRRect(
@@ -73,20 +77,24 @@ class GenreSection extends StatelessWidget {
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) {
-                                        return const Center(
+                                        return Center(
                                           child: Icon(
                                             Icons.book,
                                             size: 48,
-                                            color: AppColors.goldenAccent,
+                                            color: Theme.of(context).brightness == Brightness.dark
+                                                ? AppColors.secondaryAccent
+                                                : AppColors.goldenAccent,
                                           ),
                                         );
                                       },
                                     )
-                                  : const Center(
+                                  : Center(
                                       child: Icon(
                                         Icons.book,
                                         size: 48,
-                                        color: AppColors.goldenAccent,
+                                        color: Theme.of(context).brightness == Brightness.dark
+                                            ? AppColors.secondaryAccent
+                                            : AppColors.goldenAccent,
                                       ),
                                     ),
                             ),

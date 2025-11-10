@@ -17,6 +17,7 @@ class BookDetailScreen extends StatefulWidget {
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
   bool _isFavorite = false;
+  bool _isRead = false;
   double? _userRating;
 
   @override
@@ -30,6 +31,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     if (currentUser != null) {
       setState(() {
         _isFavorite = HiveService.isFavorite(currentUser.id, widget.book.id);
+        _isRead = HiveService.isBookRead(currentUser.id, widget.book.id);
         final rating = HiveService.getUserBookRating(currentUser.id, widget.book.id);
         _userRating = rating?.rating;
       });
@@ -52,6 +54,33 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   : 'Видалено з улюблених',
             ),
             duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _toggleReadStatus() async {
+    final currentUser = HiveService.getCurrentUser();
+    if (currentUser != null) {
+      if (_isRead) {
+        await HiveService.unmarkBookAsRead(currentUser.id, widget.book.id);
+      } else {
+        await HiveService.markBookAsRead(currentUser.id, widget.book.id);
+      }
+      setState(() {
+        _isRead = !_isRead;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _isRead
+                  ? 'Позначено як прочитане'
+                  : 'Знято позначку прочитаного',
+            ),
+            duration: const Duration(seconds: 2),
+            backgroundColor: _isRead ? AppColors.success : null,
           ),
         );
       }
@@ -108,9 +137,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 allowHalfRating: true,
                 itemCount: 5,
                 itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
+                itemBuilder: (context, _) => Icon(
                   Icons.star,
-                  color: AppColors.goldenAccent,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? AppColors.secondaryAccent
+                      : AppColors.goldenAccent,
                 ),
                 onRatingUpdate: (rating) {
                   tempRating = rating;
@@ -154,21 +185,29 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          color: AppColors.lightGold,
-                          child: const Icon(
+                          color: theme.brightness == Brightness.dark
+                              ? AppColors.darkSurfaceVariant
+                              : AppColors.lightGold.withValues(alpha: 0.3),
+                          child: Icon(
                             Icons.book,
                             size: 100,
-                            color: AppColors.goldenAccent,
+                            color: theme.brightness == Brightness.dark
+                                ? AppColors.secondaryAccent
+                                : AppColors.goldenAccent,
                           ),
                         );
                       },
                     )
                   : Container(
-                      color: AppColors.lightGold,
-                      child: const Icon(
+                      color: theme.brightness == Brightness.dark
+                          ? AppColors.darkSurfaceVariant
+                          : AppColors.lightGold.withValues(alpha: 0.3),
+                      child: Icon(
                         Icons.book,
                         size: 100,
-                        color: AppColors.goldenAccent,
+                        color: theme.brightness == Brightness.dark
+                            ? AppColors.secondaryAccent
+                            : AppColors.goldenAccent,
                       ),
                     ),
             ),
@@ -201,7 +240,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   Text(
                     widget.book.author,
                     style: theme.textTheme.titleLarge?.copyWith(
-                      color: AppColors.softBrown,
+                      color: theme.brightness == Brightness.dark
+                          ? AppColors.darkTextSecondary
+                          : AppColors.softBrown,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -213,13 +254,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: AppColors.lightGold.withValues(alpha: 0.3),
+                      color: theme.brightness == Brightness.dark
+                          ? AppColors.darkSurfaceVariant
+                          : AppColors.lightGold.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
                       widget.book.genre,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.darkBrownText,
+                        color: theme.brightness == Brightness.dark
+                            ? AppColors.darkText
+                            : AppColors.darkBrownText,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -231,9 +276,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     children: [
                       RatingBarIndicator(
                         rating: widget.book.averageRating,
-                        itemBuilder: (context, index) => const Icon(
+                        itemBuilder: (context, index) => Icon(
                           Icons.star,
-                          color: AppColors.goldenAccent,
+                          color: theme.brightness == Brightness.dark
+                              ? AppColors.secondaryAccent
+                              : AppColors.goldenAccent,
                         ),
                         itemCount: 5,
                         itemSize: 24.0,
@@ -274,6 +321,27 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       },
                       icon: const Icon(Icons.menu_book),
                       label: const Text('Читати'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: _toggleReadStatus,
+                      icon: Icon(_isRead ? Icons.check_circle : Icons.check_circle_outline),
+                      label: Text(_isRead ? 'Прочитано' : 'Позначити як прочитане'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _isRead 
+                            ? AppColors.success 
+                            : theme.brightness == Brightness.dark
+                                ? AppColors.darkSurface
+                                : AppColors.lightGold,
+                        foregroundColor: _isRead 
+                            ? Colors.white
+                            : theme.brightness == Brightness.dark
+                                ? AppColors.darkText
+                                : AppColors.darkBrownText,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),

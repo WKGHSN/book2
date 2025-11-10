@@ -27,26 +27,32 @@ class BookCard extends StatelessWidget {
               flex: 3,
               child: Container(
                 width: double.infinity,
-                color: AppColors.lightGold,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? AppColors.darkSurfaceVariant
+                    : AppColors.lightGold.withValues(alpha: 0.3),
                 child: book.coverUrl != null
                     ? Image.asset(
                         book.coverUrl!,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Center(
+                          return Center(
                             child: Icon(
                               Icons.book,
                               size: 48,
-                              color: AppColors.goldenAccent,
+                              color: Theme.of(context).brightness == Brightness.dark
+                                  ? AppColors.secondaryAccent
+                                  : AppColors.goldenAccent,
                             ),
                           );
                         },
                       )
-                    : const Center(
+                    : Center(
                         child: Icon(
                           Icons.book,
                           size: 48,
-                          color: AppColors.goldenAccent,
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.secondaryAccent
+                              : AppColors.goldenAccent,
                         ),
                       ),
               ),
@@ -83,9 +89,11 @@ class BookCard extends StatelessWidget {
                       children: [
                         RatingBarIndicator(
                           rating: book.averageRating,
-                          itemBuilder: (context, index) => const Icon(
+                          itemBuilder: (context, index) => Icon(
                             Icons.star,
-                            color: AppColors.goldenAccent,
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? AppColors.secondaryAccent
+                                : AppColors.goldenAccent,
                           ),
                           itemCount: 5,
                           itemSize: 14.0,
