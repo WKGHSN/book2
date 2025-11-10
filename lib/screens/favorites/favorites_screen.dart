@@ -3,6 +3,7 @@ import '../../models/book.dart';
 import '../../services/hive_service.dart';
 import '../book/book_detail_screen.dart';
 import '../../widgets/book_card.dart';
+import '../../constants/app_colors.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -51,7 +52,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       Icon(
                         Icons.favorite_border,
                         size: 80,
-                        color: Colors.grey[400],
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white30
+                            : Colors.grey[400],
                       ),
                       const SizedBox(height: 16),
                       Text(
@@ -61,9 +64,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Додайте книги, які вам подобаються',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),

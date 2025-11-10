@@ -138,19 +138,19 @@ class AppThemes {
     ),
   );
 
-  // Темна тема з правильними кольорами
+  // Темна тема з контрастними кольорами
   static ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.transparent, // Прозорий для градієнтів
     colorScheme: const ColorScheme.dark(
-      primary: AppColors.goldenAccent,
-      secondary: AppColors.lightGold,
-      surface: Color(0xFF1E293B), // Темна поверхня
+      primary: AppColors.secondaryAccent,
+      secondary: AppColors.primaryAccent,
+      surface: AppColors.darkSurface, // Темна поверхня
       error: AppColors.error,
-      onPrimary: AppColors.darkBrownText,
-      onSecondary: AppColors.darkBrownText,
-      onSurface: Color(0xFFF8FAFC), // Світлий текст
+      onPrimary: AppColors.darkBackground,
+      onSecondary: AppColors.darkText,
+      onSurface: AppColors.darkText, // Білий текст на темному фоні
       onError: AppColors.white,
     ),
     
@@ -158,62 +158,67 @@ class AppThemes {
       displayLarge: GoogleFonts.merriweather(
         fontSize: 32,
         fontWeight: FontWeight.bold,
-        color: const Color(0xFFF8FAFC), // Світлий текст
+        color: AppColors.darkText, // Білий текст
       ),
       displayMedium: GoogleFonts.merriweather(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       displaySmall: GoogleFonts.merriweather(
         fontSize: 24,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       headlineMedium: GoogleFonts.merriweather(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       headlineSmall: GoogleFonts.merriweather(
         fontSize: 18,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       titleLarge: GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.bold,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       titleMedium: GoogleFonts.nunito(
         fontSize: 16,
         fontWeight: FontWeight.w600,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       titleSmall: GoogleFonts.nunito(
         fontSize: 14,
         fontWeight: FontWeight.w500,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       bodyLarge: GoogleFonts.merriweather(
         fontSize: 16,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       bodyMedium: GoogleFonts.merriweather(
         fontSize: 14,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       bodySmall: GoogleFonts.nunito(
         fontSize: 12,
-        color: const Color(0xFFCBD5E1),
+        color: AppColors.darkTextSecondary,
+      ),
+      labelLarge: GoogleFonts.nunito(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: AppColors.darkText,
       ),
     ),
     
-    // Кнопки залишаються помітними
+    // Кнопки з контрастними кольорами
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.goldenAccent,
-        foregroundColor: AppColors.darkBrownText,
+        backgroundColor: AppColors.secondaryAccent,
+        foregroundColor: AppColors.darkBackground,
         textStyle: GoogleFonts.nunito(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -225,22 +230,37 @@ class AppThemes {
       ),
     ),
     
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: AppColors.darkText,
+        side: const BorderSide(color: AppColors.darkBorder),
+        textStyle: GoogleFonts.nunito(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    ),
+    
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
-      foregroundColor: const Color(0xFFF8FAFC),
+      foregroundColor: AppColors.darkText,
       elevation: 0,
       titleTextStyle: GoogleFonts.nunito(
         fontSize: 20,
         fontWeight: FontWeight.bold,
-        color: const Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
       iconTheme: const IconThemeData(
-        color: Color(0xFFF8FAFC),
+        color: AppColors.darkText,
       ),
     ),
     
     cardTheme: CardThemeData(
-      color: const Color(0xFF1E293B),
+      color: AppColors.darkSurface,
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
@@ -249,21 +269,21 @@ class AppThemes {
     
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: const Color(0xFF1E293B),
+      fillColor: AppColors.darkSurface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF334155)),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Color(0xFF334155)),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: AppColors.goldenAccent, width: 2),
+        borderSide: const BorderSide(color: AppColors.secondaryAccent, width: 2),
       ),
-      labelStyle: GoogleFonts.nunito(color: const Color(0xFFCBD5E1)),
-      hintStyle: GoogleFonts.nunito(color: const Color(0xFF94A3B8)),
+      labelStyle: GoogleFonts.nunito(color: AppColors.darkTextSecondary),
+      hintStyle: GoogleFonts.nunito(color: AppColors.darkTextSecondary),
     ),
   );
 }

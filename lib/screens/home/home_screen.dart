@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ],
           ),
 
-          // Фільтр категорій з анімацією
+          // Фільтр категорій з покращеною анімацією
           SliverToBoxAdapter(
             child: Container(
               height: 56,
@@ -153,58 +153,74 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
                 itemCount: _genres.length,
                 itemBuilder: (context, index) {
                   final genre = _genres[index];
                   final isSelected = _selectedGenre == genre || 
                       (_selectedGenre == null && genre == 'Всі');
                   
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        onTap: () => _selectGenre(genre),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected 
-                                ? AppColors.goldenAccent
-                                : (isDark 
-                                    ? Colors.white.withValues(alpha: 0.1)
-                                    : Colors.white.withValues(alpha: 0.8)),
+                  return TweenAnimationBuilder<double>(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                    tween: Tween<double>(
+                      begin: 0.0,
+                      end: isSelected ? 1.0 : 0.0,
+                    ),
+                    builder: (context, value, child) {
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
                             borderRadius: BorderRadius.circular(20),
-                            boxShadow: isSelected ? [
-                              BoxShadow(
-                                color: AppColors.goldenAccent.withValues(alpha: 0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
+                            onTap: () => _selectGenre(genre),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              curve: Curves.easeInOut,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20 + (value * 4),
+                                vertical: 10,
                               ),
-                            ] : [],
-                          ),
-                          child: Text(
-                            genre,
-                            style: TextStyle(
-                              color: isSelected 
-                                  ? AppColors.darkBrownText 
-                                  : (isDark 
-                                      ? Colors.white 
-                                      : AppColors.softBrown),
-                              fontWeight: isSelected 
-                                  ? FontWeight.bold 
-                                  : FontWeight.normal,
+                              decoration: BoxDecoration(
+                                color: isSelected 
+                                    ? (isDark 
+                                        ? AppColors.secondaryAccent
+                                        : AppColors.goldenAccent)
+                                    : (isDark 
+                                        ? Colors.white.withValues(alpha: 0.1)
+                                        : Colors.white.withValues(alpha: 0.8)),
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: isSelected ? [
+                                  BoxShadow(
+                                    color: (isDark 
+                                        ? AppColors.secondaryAccent
+                                        : AppColors.goldenAccent).withValues(alpha: 0.4),
+                                    blurRadius: 8 + (value * 4),
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ] : [],
+                              ),
+                              child: Text(
+                                genre,
+                                style: TextStyle(
+                                  color: isSelected 
+                                      ? (isDark ? AppColors.darkBackground : AppColors.darkBrownText)
+                                      : (isDark ? Colors.white : AppColors.softBrown),
+                                  fontWeight: isSelected 
+                                      ? FontWeight.bold 
+                                      : FontWeight.normal,
+                                  fontSize: 14 + (value * 1),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   );
                 },
               ),
